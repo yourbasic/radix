@@ -2,9 +2,13 @@
 //
 package radix
 
-// Sort arranges the elements of s in ascending order.
+import "sort"
+
+// Sort arranges the elements of a in ascending order.
 // The elements will be sorted in byte-wise lexicographic order.
-func Sort(s []string) {
+func Sort(a []string) {
+	// TODO
+	sort.Strings(a)
 	return
 }
 
