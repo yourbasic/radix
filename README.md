@@ -15,7 +15,7 @@ well-known sorting algorithms, both bit-based and comparison-based,
 can be found in [Implementing radixsort][implradix].
 The paper concludes that, for string sorting, radix sorting algorithms
 are much faster than the more frequently used comparison-based methods,
-and on the average Adaptive radix sort was the fastest algorithm.
+and on average Adaptive radix sort was the fastest algorithm.
 
 
 ### Installation
