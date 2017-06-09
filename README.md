@@ -1,7 +1,10 @@
 # TODO: Your basic radix sort
 
-This library contains a string sorting algorithm.
+### Golang string sorting algorithm
 
+This library contains an optimized string sorting algorithm that sorts
+**an array of strings** or **an array of byte arrays**. In both cases,
+the array elements are arranged in **byte-wise lexicographic order**.
 
 ### Adaptive radix sort
 
@@ -12,7 +15,7 @@ an optimized version of the standard MSD radix sort.
 
 A discussion of the algorithm, its implementation and a comparison with other
 well-known sorting algorithms, both bit-based and comparison-based,
-can be found in [Implementing radixsort][implradix].
+can be found in the paper [Implementing radixsort][implradix].
 The paper concludes that, for string sorting, radix sorting algorithms
 are much faster than the more frequently used comparison-based methods,
 and on average Adaptive radix sort was the fastest algorithm.
@@ -20,7 +23,7 @@ and on average Adaptive radix sort was the fastest algorithm.
 
 ### Installation
 
-Once you have [installed Go][golang-install], run this command
+Once you have [installed Go][golang-install], run the `go get` command
 to install the `radix` package:
 
     go get github.com/yourbasic/radix

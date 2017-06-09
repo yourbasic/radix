@@ -2,12 +2,14 @@
 //
 package radix
 
-// Sort sorts s in lexicographic byte order.
+// Sort arranges the elements of s in ascending order.
+// The elements will be sorted in byte-wise lexicographic order.
 func Sort(s []string) {
 	return
 }
 
-// SortByte sorts b in lexicographic byte order.
+// SortByte arranges the elements of b in ascending order.
+// The elements will be sorted in byte-wise lexicographic order.
 func SortByte(b []byte) {
 	return
 }
