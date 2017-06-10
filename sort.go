@@ -48,16 +48,17 @@ type list struct {
 func insertSort(r *list, p int) (head, tail *list) {
 	head, tail = r, r
 	for r := r.next; r != nil; r = tail.next {
+		s := r.str[p:]
 		switch {
-		case r.str[p:] >= tail.str[p:]: // Add to tail.
+		case tail.str[p:] <= s: // Add to tail.
 			tail = r
-		case r.str[p:] <= head.str[p:]: // Add to head.
+		case head.str[p:] >= s: // Add to head.
 			tail.next = r.next
 			r.next = head
 			head = r
 		default: // Insert into middle.
 			t := head
-			for r.str[p:] >= t.next.str[p:] {
+			for t.next.str[p:] <= s {
 				t = t.next
 			}
 			tail.next = r.next
