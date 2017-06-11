@@ -3,10 +3,8 @@
 
 ### A fast string sorting algorithm
 
-This library contains an optimized string sorting algorithm that sorts
-a slice of strings in increasing order.
-It's equivalent to the `sort.Strings` function in the standard Go library,
-but considerably faster.
+This is an optimized radix sort equivalent to `sort.Strings`
+in the Go standard library.
 
 
 ### Adaptive radix sort
@@ -20,8 +18,8 @@ A discussion of the algorithm, its implementation and a comparison
 with other well-known sorting algorithms can be found in the paper
 [Implementing radixsort][implradix]. The paper concludes that,
 for string sorting, carefully implemented radix sorting algorithms
-are considerably faster, **often more than twice as fast**, than
-comparison-based methods, and on average Adaptive radix sort
+are considerably faster, **often more than twice as fast**,
+than comparison-based methods, and on average Adaptive radix sort
 was the fastest algorithm.
 
 

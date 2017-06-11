@@ -1,8 +1,14 @@
 // Package radix contains a string sorting algorithm.
 //
+// A fast string sorting algorithm
+//
+// The radix.Sort function is an optimized radix sort
+// equivalent to sort.Strings in the Go standard library.
+//
 package radix
 
 // Sort sorts a slice of strings in increasing byte-wise lexicographic order.
+// It's equivalent sort.Strings in the standard library.
 func Sort(a []string) {
 	n := len(a)
 	if n < 2 {
