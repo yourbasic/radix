@@ -47,9 +47,8 @@ func BenchmarkSortMsdBible(b *testing.B) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	scanner := bufio.NewScanner(f)
-	for scanner.Scan() {
-		data = append(data, scanner.Text())
+	for sc := bufio.NewScanner(f); sc.Scan(); {
+		data = append(data, sc.Text())
 	}
 
 	a := make([]string, len(data))
@@ -71,9 +70,8 @@ func BenchmarkSortStringsBible(b *testing.B) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	scanner := bufio.NewScanner(f)
-	for scanner.Scan() {
-		data = append(data, scanner.Text())
+	for sc := bufio.NewScanner(f); sc.Scan(); {
+		data = append(data, sc.Text())
 	}
 
 	a := make([]string, len(data))
