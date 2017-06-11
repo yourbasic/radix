@@ -3,7 +3,8 @@
 ### Golang string sorting algorithm
 
 This library contains an optimized string sorting algorithm that sorts
-a slice of strings in increasing byte-wise lexicographic order.
+a slice of strings in increasing order.
+It's equivalent to the `sort.Strings` function in the standard Go library.
 
 ### Adaptive radix sort
 
@@ -26,11 +27,7 @@ Once you have [installed Go][golang-install], run the `go get` command
 to install the `radix` package:
 
     go get github.com/yourbasic/radix
-    
-### Documentation
 
-There is an online reference for the package at
-[godoc.org/github.com/yourbasic/radix][godoc-radix].
 
 ### Roadmap
 
