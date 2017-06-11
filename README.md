@@ -17,10 +17,10 @@ an optimized version of **MSD radix sort**.
 A discussion of the algorithm, its implementation and a comparison with other
 well-known sorting algorithms, both bit-based and comparison-based,
 can be found in the paper [Implementing radixsort][implradix].
-The paper concludes that, for string sorting, properly implemented
-radix sorting algorithms are much faster than the more frequently used
-comparison-based methods, and on average Adaptive radix sort
-was the fastest algorithm.
+The paper concludes that, for string sorting, carefully implemented
+radix sorting algorithms are considerably faster (often more than
+twice as fast) than comparison-based methods, and on average
+Adaptive radix sort was the fastest algorithm.
 
 
 ### Installation
