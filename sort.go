@@ -25,7 +25,7 @@ func Sort(a []string) {
 }
 
 // Breakpoint for insertion sort.
-const insertBreak = 16
+const insertBreak = 20
 
 type list struct {
 	str  string
