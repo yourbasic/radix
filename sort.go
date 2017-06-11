@@ -1,8 +1,8 @@
-// TODO: Package radix contains a string sorting algorithm.
+// Package radix contains a string sorting algorithm.
 //
 package radix
 
-// Sort sorts a slice of strings in increasing order.
+// Sort sorts a slice of strings in increasing byte-wise lexicographic order.
 func Sort(a []string) {
 	n := len(a)
 	if n < 2 {

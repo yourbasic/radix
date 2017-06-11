@@ -1,10 +1,9 @@
-# TODO: Your basic radix sort
+# Your basic radix sort
 
 ### Golang string sorting algorithm
 
 This library contains an optimized string sorting algorithm that sorts
-**an array of strings** or **an array of byte arrays**. In both cases,
-the array elements are arranged in **byte-wise lexicographic order**.
+a slice of strings in increasing byte-wise lexicographic order.
 
 ### Adaptive radix sort
 
