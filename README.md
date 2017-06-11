@@ -1,7 +1,7 @@
 # Your basic radix sort
 
 
-### Golang string sorting algorithm
+### A fast string sorting algorithm
 
 This library contains an optimized string sorting algorithm that sorts
 a slice of strings in increasing order.
