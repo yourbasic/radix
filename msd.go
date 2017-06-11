@@ -14,9 +14,9 @@ func msdRadixSort(a *list, n int) *list {
 		if frame.size == 0 { // already sorted
 			frame.tail.next = res
 			res = frame.head
-		} else {
-			stack = intoBuckets(stack, frame.head, frame.pos)
+			continue
 		}
+		stack = intoBuckets(stack, frame.head, frame.pos)
 	}
 	return res
 }
