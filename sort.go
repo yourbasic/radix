@@ -2,7 +2,7 @@
 //
 package radix
 
-// Sort sorts a in byte-wise lexicographic order.
+// Sort sorts a slice of strings in increasing order.
 func Sort(a []string) {
 	n := len(a)
 	if n < 2 {
@@ -16,9 +16,7 @@ func Sort(a []string) {
 			mem[i].next = &mem[i+1]
 		}
 	}
-
-	res := msd(&mem[0], n)
-
+	res := msdRadixSort(&mem[0], n)
 	// Put elements back into slice.
 	for i := range a {
 		a[i] = res.str
@@ -26,13 +24,7 @@ func Sort(a []string) {
 	}
 }
 
-// TODO SortByte sorts b in byte-wise lexicographic order.
-/*
-func SortByte(b []byte) {
-	return
-}
-*/
-
+// Breakpoint for insertion sort.
 const insertBreak = 16
 
 type list struct {
@@ -40,11 +32,11 @@ type list struct {
 	next *list
 }
 
-// insertSort sorts r comparing strings starting at position p.
+// insertSort sorts a list comparing strings starting at byte position p.
 // It returns the head and the tail of the sorted list.
-func insertSort(r *list, p int) (head, tail *list) {
-	head, tail = r, r
-	for r := r.next; r != nil; r = tail.next {
+func insertSort(a *list, p int) (head, tail *list) {
+	head, tail = a, a
+	for r := a.next; r != nil; r = tail.next {
 		s := r.str[p:]
 		switch {
 		case tail.str[p:] <= s: // Add to tail.
