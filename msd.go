@@ -1,7 +1,5 @@
 package radix
 
-import "fmt"
-
 // msdRadixSort sorts a list r with n elements.
 func msdRadixSort(a *list, n int) *list {
 	if n < 2 {
@@ -135,6 +133,7 @@ func ontoStack(stack []frame, b *bucket, pos int) []frame {
 }
 
 // DEBUG
+/*
 func printBucket(b *bucket) {
 	r := b.head
 	for {
@@ -145,8 +144,10 @@ func printBucket(b *bucket) {
 		r = r.next
 	}
 }
+*/
 
 // DEBUG
+/*
 func printStack(s []frame) {
 	for i, f := range s {
 		fmt.Println("frame", i)
@@ -160,3 +161,4 @@ func printStack(s []frame) {
 		}
 	}
 }
+*/
