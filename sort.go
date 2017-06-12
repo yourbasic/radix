@@ -68,7 +68,7 @@ func msdRadixSort(a *list, n int) *list {
 func intoBuckets(stack []frame, a *list, p int) []frame {
 	var b0 bucket             // 0 bytes
 	b1 := make([]bucket, 256) // 1 byte
-	chMin, chMax := 255, 0    // Keep track of the min and max byte.
+	min, max := 255, 0        // Keep track of the min and max byte.
 
 	// Move elements in blocks consisting of strings that have
 	// a common byte in position p.
@@ -90,7 +90,7 @@ func intoBuckets(stack []frame, a *list, p int) []frame {
 		if prevCh == -1 {
 			intoBucket0(&b0, a, t)
 		} else {
-			intoBucket1(&b1[prevCh], a, t, size-1, prevCh, &chMin, &chMax)
+			intoBucket1(&b1[prevCh], a, t, size-1, prevCh, &min, &max)
 		}
 		a = tn
 		prevCh = ch
@@ -99,13 +99,13 @@ func intoBuckets(stack []frame, a *list, p int) []frame {
 	if prevCh == -1 {
 		intoBucket0(&b0, a, t)
 	} else {
-		intoBucket1(&b1[prevCh], a, t, size, prevCh, &chMin, &chMax)
+		intoBucket1(&b1[prevCh], a, t, size, prevCh, &min, &max)
 	}
 
 	if b0.head != nil {
 		stack = ontoStack(stack, &b0, p)
 	}
-	for i, max := int(chMin), int(chMax); i <= max; i++ {
+	for i, n := int(min), int(max); i <= n; i++ {
 		if b1[i].head != nil {
 			stack = ontoStack(stack, &b1[i], p+1)
 		}
@@ -128,7 +128,7 @@ func intoBucket0(b *bucket, head, tail *list) {
 // The min and max bytes seen so far  are updated when the bucket
 // is updated for the first time.
 func intoBucket1(b *bucket, head, tail *list, size int,
-	ch int, chMin, chMax *int) {
+	ch int, min, max *int) {
 	if b.head != nil {
 		b.tail.next = head
 		b.tail = tail
@@ -138,11 +138,11 @@ func intoBucket1(b *bucket, head, tail *list, size int,
 	b.head = head
 	b.tail = tail
 	b.size = size
-	if ch < *chMin {
-		*chMin = ch
+	if ch < *min {
+		*min = ch
 	}
-	if ch > *chMax {
-		*chMax = ch
+	if ch > *max {
+		*max = ch
 	}
 }
 
