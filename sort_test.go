@@ -11,7 +11,7 @@ import (
 )
 
 func TestSort(t *testing.T) {
-	data := [...]string{"", "Hello", "foo", "fo", "bar", "foo", "f00", "%*&^*&^&", "***"}
+	data := [...]string{"", "Hello", "foo", "fo", "xb", "xa", "bar", "foo", "f00", "%*&^*&^&", "***"}
 	sorted := data[0:]
 	sort.Strings(sorted)
 
@@ -59,7 +59,7 @@ func TestSortBible(t *testing.T) {
 		for i, s := range data {
 			if s != sorted[i] {
 				t.Errorf("%v  got: %v", i, s)
-				t.Errorf("%v want: %v\n\n", i, sorted[i])			
+				t.Errorf("%v want: %v\n\n", i, sorted[i])
 			}
 		}
 		//t.Errorf(" got %v", "data")

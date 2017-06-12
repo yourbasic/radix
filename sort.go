@@ -22,8 +22,8 @@ func Sort(a []string) {
 			mem[i].next = &mem[i+1]
 		}
 	}
-	res := msdRadixSort(&mem[0], n)
-	//res := adaptiveRadixSort(&mem[0], n)
+	//res := msdRadixSort(&mem[0], n)
+	res := adaptiveRadixSort(&mem[0], n)
 	// Put elements back into slice.
 	for i := range a {
 		a[i] = res.str
@@ -49,16 +49,14 @@ type bucket struct {
 }
 
 // intoBucket0 puts a list of elements into a bucket.
-func intoBucket0(b *bucket, head, tail *list, size int) {
+func intoBucket0(b *bucket, head, tail *list) {
 	if b.head != nil {
 		b.tail.next = head
 		b.tail = tail
-		b.size += size
 		return
 	}
 	b.head = head
 	b.tail = tail
-	b.size = size
 }
 
 // intoBucketa puts a list of elements into a bucket.
@@ -141,34 +139,3 @@ func insertSort(a *list, p int) (head, tail *list) {
 	}
 	return
 }
-
-// DEBUG
-/*
-func printBucket(b *bucket) {
-	r := b.head
-	for {
-		fmt.Println(" ", r.str)
-		if r == b.tail {
-			break
-		}
-		r = r.next
-	}
-}
-*/
-
-// DEBUG
-/*
-func printStack(s []frame) {
-	for i, f := range s {
-		fmt.Println("frame", i)
-		r := f.head
-		for {
-			fmt.Println(" ", r.str)
-			if r == f.tail {
-				break
-			}
-			r = r.next
-		}
-	}
-}
-*/

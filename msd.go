@@ -50,7 +50,7 @@ func intoBuckets(stack []frame, a *list, pos int) []frame {
 			continue
 		}
 		if prevCh == -1 {
-			intoBucket0(&b0, a, t, size-1)
+			intoBucket0(&b0, a, t)
 		} else {
 			intoBucket1(&b1[prevCh], a, t, size-1, prevCh, &chMin, &chMax)
 		}
@@ -59,13 +59,12 @@ func intoBuckets(stack []frame, a *list, pos int) []frame {
 		size = 1
 	}
 	if prevCh == -1 {
-		intoBucket0(&b0, a, t, size-1)
+		intoBucket0(&b0, a, t)
 	} else {
-		intoBucket1(&b1[prevCh], a, t, size-1, prevCh, &chMin, &chMax)
+		intoBucket1(&b1[prevCh], a, t, size, prevCh, &chMin, &chMax)
 	}
 
 	if b0.head != nil {
-		b0.size = 0 // Mark as already sorted.
 		stack = ontoStack(stack, &b0, pos)
 	}
 	for i, max := int(chMin), int(chMax); i <= max; i++ {

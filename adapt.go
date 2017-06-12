@@ -1,6 +1,6 @@
 package radix
 
-const byteBreak = 10000
+const byteBreak = 16000
 
 // adaptivRadixSort sorts a list r with n elements.
 func adaptiveRadixSort(a *list, n int) *list {
@@ -65,7 +65,7 @@ func intoBuckets2(stack []frame, a *list, pos int) []frame {
 		}
 		switch prevKey >> 16 {
 		case 0:
-			intoBucket0(&b0, a, t, size-1)
+			intoBucket0(&b0, a, t)
 		case 1:
 			ch := prevKey & 0xFF
 			intoBucket1(&b1[ch], a, t, size-1, ch, &chMin, &chMax)
@@ -79,18 +79,17 @@ func intoBuckets2(stack []frame, a *list, pos int) []frame {
 	}
 	switch prevKey >> 16 {
 	case 0:
-		intoBucket0(&b0, a, t, size-1)
+		intoBucket0(&b0, a, t)
 	case 1:
 		ch := prevKey & 0xFF
-		intoBucket1(&b1[ch], a, t, size-1, ch, &chMin, &chMax)
+		intoBucket1(&b1[ch], a, t, size, ch, &chMin, &chMax)
 	default:
 		ch := prevKey & 0xFFFF
-		intoBucket2(&b2[ch], a, t, size-1, ch, used1, used2)
+		intoBucket2(&b2[ch], a, t, size, ch, used1, used2)
 	}
 
 	// 0 bytes
 	if b0.head != nil {
-		b0.size = 0 // Mark as already sorted.
 		stack = ontoStack(stack, &b0, pos)
 	}
 
