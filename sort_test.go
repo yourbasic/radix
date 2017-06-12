@@ -21,6 +21,20 @@ func TestSort(t *testing.T) {
 		t.Errorf(" got %v", a)
 		t.Errorf("want %v", sorted)
 	}
+
+	Sort(nil)
+	a = []string{}
+	Sort(a)
+	if !reflect.DeepEqual(a, []string{}) {
+		t.Errorf(" got %v", a)
+		t.Errorf("want %v", []string{})
+	}
+	a = []string{""}
+	Sort(a)
+	if !reflect.DeepEqual(a, []string{""}) {
+		t.Errorf(" got %v", a)
+		t.Errorf("want %v", []string{""})
+	}
 }
 
 func TestSort1k(t *testing.T) {
