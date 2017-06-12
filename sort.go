@@ -175,7 +175,7 @@ func ontoStack(stack []frame, b *bucket, pos int) []frame {
 // It returns the head and the tail of the sorted list.
 func insertSort(a *list, p int) (head, tail *list) {
 	head, tail = a, a
-	for r := a.next; r != nil; r = tail.next {
+	for r := head.next; r != nil; r = tail.next {
 		s := r.str[p:]
 		switch {
 		case tail.str[p:] <= s: // Add to tail.
