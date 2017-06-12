@@ -31,34 +31,53 @@ func adaptiveRadixSort(a *list, n int) *list {
 // The main difference is that we use the arrays used1 and used 2
 // to reduce the number of empty buckets that are inspected.
 func intoBuckets2(stack []frame, a *list, pos int) []frame {
-	b := make([]bucket, 256*256) // TODO Fix end of string.
+	// 0-1 byte
+	b := make([]bucket, 257) // b[256] holds strings with 0 bytes.
+	chMin, chMax := 255, 0
+
+	// 2 bytes
+	b2 := make([]bucket, 256*256)
 	used1 := make([]int, 256)
 	used2 := make([]int, 256)
 
 	t := a
 	prevCh := 0 // TODO Read two bytes.
-	//prevCh := 256
-	//if len(t.str) > pos {
-	//	prevCh = int(t.str[pos])
-	//}
 	size := 1
 	for tn := t.next; tn != nil; t, tn = tn, tn.next {
 		ch := 0 // TODO Read two bytes.
-		//ch := 256
-		//if len(tn.str) > pos {
-		//	ch = int(tn.str[pos])
-		//}
 		size++
 		if ch == prevCh {
 			continue
 		}
-		intoBucket2(&b[prevCh], a, t, size-1, prevCh, used1, used2)
+		if true { // TODO Check #bytes.
+			intoBucket(&b[prevCh], a, t, size-1, prevCh, &chMin, &chMax)
+		} else {
+			intoBucket2(&b2[prevCh], a, t, size-1, prevCh, used1, used2)
+		}
 		a = tn
 		prevCh = ch
 		size = 1
 	}
-	intoBucket2(&b[prevCh], a, t, size, prevCh, used1, used2)
+	if true { // TODO Check #bytes.
+		intoBucket(&b[prevCh], a, t, size-1, prevCh, &chMin, &chMax)
+	} else {
+		intoBucket2(&b2[prevCh], a, t, size-1, prevCh, used1, used2)
+	}
 
+	// 0 bytes
+	if b[256].head != nil {
+		b[256].size = 0 // Mark as already sorted.
+		stack = ontoStack(stack, &b[256], pos)
+	}
+
+	// 1 byte
+	for i, max := int(chMin), int(chMax); i <= max; i++ {
+		if b[i].head != nil {
+			stack = ontoStack(stack, &b[i], pos+1)
+		}
+	}
+
+	// 2 bytes
 	var buckets1, buckets2 int
 	for ch := 0; ch < 256; ch++ {
 		if used1[ch] == 1 {
@@ -70,16 +89,15 @@ func intoBuckets2(stack []frame, a *list, pos int) []frame {
 			buckets2++
 		}
 	}
-
 	for ch1 := 0; ch1 < buckets1; ch1++ {
 		high := used1[ch1] << 8
 		for ch2 := 0; ch2 < buckets2; ch2++ {
 			ch := high | used2[ch2]
-			if b[ch].head != nil {
-				if true == false { // TODO Check if end of string.
-					b[ch].size = 0 // Mark as already sorted.
+			if b2[ch].head != nil {
+				if true == false {
+					b2[ch].size = 0 // Mark as already sorted.
 				}
-				stack = ontoStack(stack, &b[ch], pos+2)
+				stack = ontoStack(stack, &b2[ch], pos+2)
 			}
 		}
 	}
