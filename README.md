@@ -7,21 +7,18 @@ This is an optimized radix sort equivalent to `sort.Strings`
 in the Go standard library.
 
 
-### Adaptive radix sort
+### MSD radix sort
 
 ![Radix sort](res/radix.png)
 
-The algorithm is implemented using **Adaptive radix sort**,
-an optimized version of **MSD radix sort**.
+The algorithm is implemented using an optimized version of **MSD radix sort**.
 
 A discussion of the algorithm, its implementation and a comparison
 with other well-known sorting algorithms can be found in the paper
 [Implementing radixsort][implradix]. The paper concludes that,
 for string sorting, carefully implemented radix sorting algorithms
 are considerably faster, **often more than twice as fast**,
-than comparison-based methods, and on average Adaptive radix sort
-was the fastest algorithm.
-
+than comparison-based methods.
 
 ### Installation
 
