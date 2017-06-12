@@ -1,6 +1,6 @@
 package radix
 
-const byteBreak = 1
+const byteBreak = 10000
 
 // adaptivRadixSort sorts a list r with n elements.
 func adaptiveRadixSort(a *list, n int) *list {
@@ -51,8 +51,8 @@ func intoBuckets2(stack []frame, a *list, pos int) []frame {
 	chMin, chMax := 255, 0
 	// 2 bytes
 	b2 := make([]bucket, 256*256)
-	used1 := make([]int, 256)
-	used2 := make([]int, 256)
+	used1 := make([]bool, 256)
+	used2 := make([]bool, 256)
 
 	t := a
 	prevKey := readBytes(t.str, pos)
@@ -94,29 +94,23 @@ func intoBuckets2(stack []frame, a *list, pos int) []frame {
 		stack = ontoStack(stack, &b0, pos)
 	}
 
-	// 1 byte TODO mix into 2 bytes!
-	for i, max := int(chMin), int(chMax); i <= max; i++ {
-		if b1[i].head != nil {
-			stack = ontoStack(stack, &b1[i], pos+1)
-		}
-	}
-
-	// 2 bytes
-	var buckets1, buckets2 int
+	// 1-2 bytes
+	var lowByte []int
 	for ch := 0; ch < 256; ch++ {
-		if used1[ch] == 1 {
-			used1[buckets1] = ch
-			buckets1++
-		}
-		if used2[ch] == 1 {
-			used2[buckets2] = ch
-			buckets2++
+		if used2[ch] {
+			lowByte = append(lowByte, ch)
 		}
 	}
-	for ch1 := 0; ch1 < buckets1; ch1++ {
-		high := used1[ch1] << 8
-		for ch2 := 0; ch2 < buckets2; ch2++ {
-			ch := high | used2[ch2]
+	for ch1 := 0; ch1 < 256; ch1++ {
+		if b1[ch1].head != nil {
+			stack = ontoStack(stack, &b1[ch1], pos+1)
+		}
+		if !used1[ch1] {
+			continue
+		}
+		high := ch1 << 8
+		for _, ch2 := range lowByte {
+			ch := high | ch2
 			if b2[ch].head != nil {
 				stack = ontoStack(stack, &b2[ch], pos+2)
 			}
@@ -127,10 +121,10 @@ func intoBuckets2(stack []frame, a *list, pos int) []frame {
 
 // intoBucket2 puts a list of elements into a bucket.
 // For two-byte bucketing the bookkeeping is more elaborate.
-// We use two integer arrays, used1 and used2, to keep track of
-// what characters occur in the first and second position.
+// We use two bool slices, used1 and used2, to keep track of
+// what bytes occur in the first and second position.
 func intoBucket2(b *bucket, head, tail *list, size int,
-	ch int, used1, used2 []int) {
+	ch int, used1, used2 []bool) {
 	if b.head != nil {
 		b.tail.next = head
 		b.tail = tail
@@ -140,6 +134,6 @@ func intoBucket2(b *bucket, head, tail *list, size int,
 	b.head = head
 	b.tail = tail
 	b.size = size
-	used1[ch>>8] = 1
-	used2[ch&0xFF] = 1
+	used1[ch>>8] = true
+	used2[ch&0xFF] = true
 }
