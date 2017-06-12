@@ -33,13 +33,13 @@ func intoBuckets(stack []frame, a *list, pos int) []frame {
 	chMin, chMax := 255, 0
 
 	t := a
-	prevCh := 256
+	prevCh := -1
 	if len(t.str) > pos {
 		prevCh = int(t.str[pos])
 	}
 	size := 1
 	for tn := t.next; tn != nil; t, tn = tn, tn.next {
-		ch := 256
+		ch := -1
 		if len(tn.str) > pos {
 			ch = int(tn.str[pos])
 		}
@@ -47,19 +47,19 @@ func intoBuckets(stack []frame, a *list, pos int) []frame {
 		if ch == prevCh {
 			continue
 		}
-		if prevCh == 256 {
+		if prevCh == -1 {
 			intoBucket0(&b0, a, t, size-1)
 		} else {
-			intoBucket1(&b1[prevCh], a, t, size-1, prevCh, &chMin, &chMax)	
+			intoBucket1(&b1[prevCh], a, t, size-1, prevCh, &chMin, &chMax)
 		}
 		a = tn
 		prevCh = ch
 		size = 1
 	}
-	if prevCh == 256 {
+	if prevCh == -1 {
 		intoBucket0(&b0, a, t, size-1)
 	} else {
-		intoBucket1(&b1[prevCh], a, t, size-1, prevCh, &chMin, &chMax)	
+		intoBucket1(&b1[prevCh], a, t, size-1, prevCh, &chMin, &chMax)
 	}
 
 	if b0.head != nil {
