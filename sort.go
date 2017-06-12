@@ -48,9 +48,6 @@ type frame struct {
 }
 
 func msdRadixSort(a *list, n int) *list {
-	if n < 2 {
-		return a
-	}
 	var res *list
 	stack := []frame{{head: a, size: n}}
 	for len(stack) > 0 {
