@@ -62,8 +62,6 @@ func TestSortBible(t *testing.T) {
 				t.Errorf("%v want: %v\n\n", i, sorted[i])
 			}
 		}
-		//t.Errorf(" got %v", "data")
-		//t.Errorf("want %v", "sorted")
 	}
 }
 
