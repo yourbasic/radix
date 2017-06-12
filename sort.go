@@ -8,7 +8,7 @@
 package radix
 
 // Sort sorts a slice of strings in increasing byte-wise lexicographic order.
-// It's equivalent sort.Strings in the standard library.
+// The function is equivalent to sort.Strings in the standard library.
 func Sort(a []string) {
 	n := len(a)
 	if n < 2 {
