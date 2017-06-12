@@ -28,7 +28,9 @@ func msdRadixSort(a *list, n int) *list {
 // In this way we may avoid looking at some empty buckets when we traverse
 // the buckets in order and push the lists onto the stack.
 func intoBuckets(stack []frame, a *list, pos int) []frame {
+	// 0 bytes
 	var b0 bucket
+	// 1 byte
 	b1 := make([]bucket, 256)
 	chMin, chMax := 255, 0
 

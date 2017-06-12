@@ -1,6 +1,6 @@
 package radix
 
-const byteBreak = 1500
+const byteBreak = 1
 
 // adaptivRadixSort sorts a list r with n elements.
 func adaptiveRadixSort(a *list, n int) *list {
@@ -27,53 +27,77 @@ func adaptiveRadixSort(a *list, n int) *list {
 	return res
 }
 
-// intoBuckets2 is very similar to the one byte version intoBuckets.
+// readBytes reads 0-2 bytes from pos p to the end of string in s.
+// Output format: bit 17-16: number of bytes, bit 15-0: value.
+func readBytes(s string, p int) int {
+	switch len(s) - p {
+	case 0:
+		return 0
+	case 1:
+		return (1 << 16) | int(s[p])
+	default:
+		return (1 << 17) | (int(s[p]) << 8) | int(s[p+1])
+	}
+}
+
+// intoBuckets2 is very similar to the one-byte version intoBuckets.
 // The main difference is that we use the arrays used1 and used 2
 // to reduce the number of empty buckets that are inspected.
 func intoBuckets2(stack []frame, a *list, pos int) []frame {
-	// 0-1 byte
-	b := make([]bucket, 257) // b[256] holds strings with 0 bytes.
+	// 0 bytes
+	var b0 bucket
+	// 1 byte
+	b1 := make([]bucket, 256)
 	chMin, chMax := 255, 0
-
 	// 2 bytes
 	b2 := make([]bucket, 256*256)
 	used1 := make([]int, 256)
 	used2 := make([]int, 256)
 
 	t := a
-	prevCh := 0 // TODO Read two bytes.
+	prevKey := readBytes(t.str, pos)
 	size := 1
 	for tn := t.next; tn != nil; t, tn = tn, tn.next {
-		ch := 0 // TODO Read two bytes.
+		key := readBytes(tn.str, pos)
 		size++
-		if ch == prevCh {
+		if key == prevKey {
 			continue
 		}
-		if true { // TODO Check #bytes.
-			intoBucket1(&b[prevCh], a, t, size-1, prevCh, &chMin, &chMax)
-		} else {
-			intoBucket2(&b2[prevCh], a, t, size-1, prevCh, used1, used2)
+		switch prevKey >> 16 {
+		case 0:
+			intoBucket0(&b0, a, t, size-1)
+		case 1:
+			ch := prevKey & 0xFF
+			intoBucket1(&b1[ch], a, t, size-1, ch, &chMin, &chMax)
+		default:
+			ch := prevKey & 0xFFFF
+			intoBucket2(&b2[ch], a, t, size-1, ch, used1, used2)
 		}
 		a = tn
-		prevCh = ch
+		prevKey = key
 		size = 1
 	}
-	if true { // TODO Check #bytes.
-		intoBucket1(&b[prevCh], a, t, size-1, prevCh, &chMin, &chMax)
-	} else {
-		intoBucket2(&b2[prevCh], a, t, size-1, prevCh, used1, used2)
+	switch prevKey >> 16 {
+	case 0:
+		intoBucket0(&b0, a, t, size-1)
+	case 1:
+		ch := prevKey & 0xFF
+		intoBucket1(&b1[ch], a, t, size-1, ch, &chMin, &chMax)
+	default:
+		ch := prevKey & 0xFFFF
+		intoBucket2(&b2[ch], a, t, size-1, ch, used1, used2)
 	}
 
 	// 0 bytes
-	if b[256].head != nil {
-		b[256].size = 0 // Mark as already sorted.
-		stack = ontoStack(stack, &b[256], pos)
+	if b0.head != nil {
+		b0.size = 0 // Mark as already sorted.
+		stack = ontoStack(stack, &b0, pos)
 	}
 
-	// 1 byte
+	// 1 byte TODO mix into 2 bytes!
 	for i, max := int(chMin), int(chMax); i <= max; i++ {
-		if b[i].head != nil {
-			stack = ontoStack(stack, &b[i], pos+1)
+		if b1[i].head != nil {
+			stack = ontoStack(stack, &b1[i], pos+1)
 		}
 	}
 
@@ -94,9 +118,6 @@ func intoBuckets2(stack []frame, a *list, pos int) []frame {
 		for ch2 := 0; ch2 < buckets2; ch2++ {
 			ch := high | used2[ch2]
 			if b2[ch].head != nil {
-				if true == false {
-					b2[ch].size = 0 // Mark as already sorted.
-				}
 				stack = ontoStack(stack, &b2[ch], pos+2)
 			}
 		}
@@ -120,5 +141,5 @@ func intoBucket2(b *bucket, head, tail *list, size int,
 	b.tail = tail
 	b.size = size
 	used1[ch>>8] = 1
-	used2[ch&255] = 1
+	used2[ch&0xFF] = 1
 }

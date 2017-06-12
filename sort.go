@@ -22,7 +22,8 @@ func Sort(a []string) {
 			mem[i].next = &mem[i+1]
 		}
 	}
-	res := msdRadixSort(&mem[0], n)
+	//res := msdRadixSort(&mem[0], n)
+	res := adaptiveRadixSort(&mem[0], n)
 	// Put elements back into slice.
 	for i := range a {
 		a[i] = res.str
