@@ -157,7 +157,7 @@ func ontoStack(stack []frame, b *bucket, pos int) []frame {
 	}
 	// If both the the list on top of the stack and the new list are sorted,
 	// the new list is appended and no stack record is created.
-	if top := len(stack) - 1; b.size == 0 && top >= 0 && stack[top].size == 0 {
+	if top := len(stack) - 1; top >= 0 && stack[top].size == 0 && b.size == 0 {
 		stack[top].tail.next = b.head
 		stack[top].tail = b.tail
 	} else {
