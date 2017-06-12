@@ -1,24 +1,20 @@
 # Your basic radix sort
 
-
 ### A fast string sorting algorithm
 
-This is an optimized radix sort equivalent to `sort.Strings`
-in the Go standard library.
-
+This is an optimized sorting algorithm equivalent to `sort.Strings`
+in the Go standard library. For string sorting, a carefully implemented
+radix sort can be considerably faster than Quicksort, sometimes
+**more than twice as fast**.
 
 ### MSD radix sort
 
 ![Radix sort](res/radix.png)
 
-The algorithm is implemented using an optimized version of **MSD radix sort**.
+A discussion of **MSD radix sort**, its implementation and a comparison
+with other well-known sorting algorithms can be found in
+[Implementing radixsort][implradix].
 
-A discussion of the algorithm, its implementation and a comparison
-with other well-known sorting algorithms can be found in the paper
-[Implementing radixsort][implradix]. The paper concludes that,
-for string sorting, carefully implemented radix sorting algorithms
-are considerably faster, **often more than twice as fast**,
-than comparison-based methods.
 
 ### Installation
 
@@ -32,7 +28,6 @@ to install the `radix` package:
 
 * The API of this library is not yet frozen.
 * Version numbers will adhere to [semantic versioning][sv].
-
 
 Stefan Nilsson – [korthaj](https://github.com/korthaj)
 
