@@ -40,6 +40,33 @@ func TestSort1k(t *testing.T) {
 	}
 }
 
+func TestSortBible(t *testing.T) {
+	var data []string
+	f, err := os.Open("res/bible.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for sc := bufio.NewScanner(f); sc.Scan(); {
+		data = append(data, sc.Text())
+	}
+
+	sorted := make([]string, len(data))
+	copy(sorted, data)
+	sort.Strings(sorted)
+
+	Sort(data)
+	if !reflect.DeepEqual(data, sorted) {
+		for i, s := range data {
+			if s != sorted[i] {
+				t.Errorf("%v  got: %v", i, s)
+				t.Errorf("%v want: %v\n\n", i, sorted[i])			
+			}
+		}
+		//t.Errorf(" got %v", "data")
+		//t.Errorf("want %v", "sorted")
+	}
+}
+
 func BenchmarkSortMsdBible(b *testing.B) {
 	b.StopTimer()
 	var data []string
