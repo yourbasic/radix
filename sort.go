@@ -47,10 +47,23 @@ type bucket struct {
 	size       int // size of list, 0 if already sorted
 }
 
-// intoBucket puts a list of elements into a bucket.
+// intoBucket0 puts a list of elements into a bucket.
+func intoBucket0(b *bucket, head, tail *list, size int) {
+	if b.head != nil {
+		b.tail.next = head
+		b.tail = tail
+		b.size += size
+		return
+	}
+	b.head = head
+	b.tail = tail
+	b.size = size
+}
+
+// intoBucketa puts a list of elements into a bucket.
 // The minimum and maximum character seen so far (chMin, chMax)
 // are updated when the bucket is updated for the first time.
-func intoBucket(b *bucket, head, tail *list, size int,
+func intoBucket1(b *bucket, head, tail *list, size int,
 	ch int, chMin, chMax *int) {
 	if b.head != nil {
 		b.tail.next = head
@@ -61,9 +74,6 @@ func intoBucket(b *bucket, head, tail *list, size int,
 	b.head = head
 	b.tail = tail
 	b.size = size
-	if ch == 256 {
-		return
-	}
 	if ch < *chMin {
 		*chMin = ch
 	}

@@ -50,7 +50,7 @@ func intoBuckets2(stack []frame, a *list, pos int) []frame {
 			continue
 		}
 		if true { // TODO Check #bytes.
-			intoBucket(&b[prevCh], a, t, size-1, prevCh, &chMin, &chMax)
+			intoBucket1(&b[prevCh], a, t, size-1, prevCh, &chMin, &chMax)
 		} else {
 			intoBucket2(&b2[prevCh], a, t, size-1, prevCh, used1, used2)
 		}
@@ -59,7 +59,7 @@ func intoBuckets2(stack []frame, a *list, pos int) []frame {
 		size = 1
 	}
 	if true { // TODO Check #bytes.
-		intoBucket(&b[prevCh], a, t, size-1, prevCh, &chMin, &chMax)
+		intoBucket1(&b[prevCh], a, t, size-1, prevCh, &chMin, &chMax)
 	} else {
 		intoBucket2(&b2[prevCh], a, t, size-1, prevCh, used1, used2)
 	}

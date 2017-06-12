@@ -28,7 +28,8 @@ func msdRadixSort(a *list, n int) *list {
 // In this way we may avoid looking at some empty buckets when we traverse
 // the buckets in order and push the lists onto the stack.
 func intoBuckets(stack []frame, a *list, pos int) []frame {
-	b := make([]bucket, 257) // b[256] holds strings with length equal to pos.
+	var b0 bucket
+	b1 := make([]bucket, 256)
 	chMin, chMax := 255, 0
 
 	t := a
@@ -46,20 +47,28 @@ func intoBuckets(stack []frame, a *list, pos int) []frame {
 		if ch == prevCh {
 			continue
 		}
-		intoBucket(&b[prevCh], a, t, size-1, prevCh, &chMin, &chMax)
+		if prevCh == 256 {
+			intoBucket0(&b0, a, t, size-1)
+		} else {
+			intoBucket1(&b1[prevCh], a, t, size-1, prevCh, &chMin, &chMax)	
+		}
 		a = tn
 		prevCh = ch
 		size = 1
 	}
-	intoBucket(&b[prevCh], a, t, size, prevCh, &chMin, &chMax)
+	if prevCh == 256 {
+		intoBucket0(&b0, a, t, size-1)
+	} else {
+		intoBucket1(&b1[prevCh], a, t, size-1, prevCh, &chMin, &chMax)	
+	}
 
-	if b[256].head != nil {
-		b[256].size = 0 // Mark as already sorted.
-		stack = ontoStack(stack, &b[256], pos)
+	if b0.head != nil {
+		b0.size = 0 // Mark as already sorted.
+		stack = ontoStack(stack, &b0, pos)
 	}
 	for i, max := int(chMin), int(chMax); i <= max; i++ {
-		if b[i].head != nil {
-			stack = ontoStack(stack, &b[i], pos+1)
+		if b1[i].head != nil {
+			stack = ontoStack(stack, &b1[i], pos+1)
 		}
 	}
 	return stack
