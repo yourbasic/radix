@@ -24,10 +24,16 @@ to install the `radix` package:
     go get github.com/yourbasic/radix
 
 
+### Documentation
+
+There is an online reference for the package at
+[godoc.org/github.com/yourbasic/radix][godoc-radix].
+
+
 ### Roadmap
 
-* The API of this library is not yet frozen.
-* Version numbers will adhere to [semantic versioning][sv].
+* The API of this library is frozen.
+* Version numbers adhere to [semantic versioning][sv].
 
 Stefan Nilsson – [korthaj](https://github.com/korthaj)
 
