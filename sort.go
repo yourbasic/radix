@@ -105,9 +105,9 @@ func intoBuckets(stack []frame, a *list, p int) []frame {
 	if b0.head != nil {
 		stack = ontoStack(stack, &b0, p)
 	}
-	for i, n := min, max; i <= n; i++ {
-		if b1[i].head != nil {
-			stack = ontoStack(stack, &b1[i], p+1)
+	for ch, n := min, max; ch <= n; ch++ {
+		if b1[ch].head != nil {
+			stack = ontoStack(stack, &b1[ch], p+1)
 		}
 	}
 	return stack
@@ -160,14 +160,14 @@ func ontoStack(stack []frame, b *bucket, pos int) []frame {
 	if top := len(stack) - 1; top >= 0 && stack[top].size == 0 && b.size == 0 {
 		stack[top].tail.next = b.head
 		stack[top].tail = b.tail
-	} else {
-		stack = append(stack, frame{
-			head: b.head,
-			tail: b.tail,
-			size: b.size,
-			pos:  pos,
-		})
+		return stack
 	}
+	stack = append(stack, frame{
+		head: b.head,
+		tail: b.tail,
+		size: b.size,
+		pos:  pos,
+	})
 	return stack
 }
 
