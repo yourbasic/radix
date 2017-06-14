@@ -6,6 +6,31 @@
 //
 package radix
 
+import "reflect"
+
+// TODO: SortSlice sorts a slice according to the strings returned by str.
+//
+// The function panics if the provided interface is not a slice.
+func SortSlice(slice interface{}, str func(i int) string) {
+	rv := reflect.ValueOf(slice)
+	swap := reflect.Swapper(slice)
+	n := rv.Len()
+	if n < 2 {
+		return
+	}
+	mem := make([]list, n) // Put elements into a linked list.
+	for i := 0; i < n; i++ {
+		mem[i].str = str(i)
+		if i < n-1 {
+			mem[i].next = &mem[i+1]
+		}
+	}
+	_ = msdRadixSort(&mem[0], n)
+	swap(0, 1)
+	swap(2, 3)
+	swap(1, 2)
+}
+
 // Sort sorts a slice of strings in increasing byte-wise lexicographic order.
 // The function is equivalent to sort.Strings in the standard library.
 func Sort(a []string) {
