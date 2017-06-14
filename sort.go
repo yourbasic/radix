@@ -12,6 +12,9 @@ import "reflect"
 //
 // The function panics if the provided interface is not a slice.
 func SortSlice(slice interface{}, str func(i int) string) {
+	if slice == nil {
+		return
+	}
 	rv := reflect.ValueOf(slice)
 	swap := reflect.Swapper(slice)
 	n := rv.Len()
@@ -21,12 +24,18 @@ func SortSlice(slice interface{}, str func(i int) string) {
 	mem := make([]list, n) // Put elements into a linked list.
 	for i := 0; i < n; i++ {
 		mem[i].str = str(i)
+		mem[i].index = i
 		if i < n-1 {
 			mem[i].next = &mem[i+1]
 		}
 	}
-	_ = msdRadixSort(&mem[0], n)
-	perm := []int{2, 0, 3, 1}
+	res := msdRadixSort(&mem[0], n)
+	perm := make([]int, n)
+	for i := 0; i < n; i++ {
+		perm[res.index] = i
+		res = res.next
+	}
+	//perm := []int{2, 0, 3, 1}
 	for i := 0; i < len(perm); i++ {
 		j := perm[i]
 		for j != i {
@@ -60,8 +69,9 @@ func Sort(a []string) {
 const insertBreak = 16
 
 type list struct {
-	str  string
-	next *list
+	index int
+	str   string
+	next  *list
 }
 
 type bucket struct {
