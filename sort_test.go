@@ -10,12 +10,13 @@ import (
 	"testing"
 )
 
+var text = [...]string{"", "Hello", "foo", "fo", "xb", "xa", "bar", "foo", "f00", "%*&^*&^&", "***"}
+
 func TestSort(t *testing.T) {
-	data := [...]string{"", "Hello", "foo", "fo", "xb", "xa", "bar", "foo", "f00", "%*&^*&^&", "***"}
-	sorted := data[0:]
+	sorted := text[0:]
 	sort.Strings(sorted)
 
-	a := data[0:]
+	a := text[0:]
 	Sort(a)
 	if !reflect.DeepEqual(a, sorted) {
 		t.Errorf(" got %v", a)
@@ -38,11 +39,10 @@ func TestSort(t *testing.T) {
 }
 
 func TestSortSlice(t *testing.T) {
-	data := [...]string{"", "Hello", "foo", "fo", "xb", "xa", "bar", "foo", "f00", "%*&^*&^&", "***"}
-	sorted := data[0:]
+	sorted := text[0:]
 	sort.Strings(sorted)
 
-	a := data[0:]
+	a := text[0:]
 	str := func(i int) string { return a[i] }
 	SortSlice(a, str)
 	if !reflect.DeepEqual(a, sorted) {
@@ -75,8 +75,7 @@ func TestSort1k(t *testing.T) {
 	copy(sorted, data)
 	sort.Strings(sorted)
 
-	str := func(i int) string { return data[i] }
-	SortSlice(data, str)
+	Sort(data)
 	if !reflect.DeepEqual(data, sorted) {
 		t.Errorf(" got %v", data)
 		t.Errorf("want %v", sorted)
@@ -93,7 +92,7 @@ func TestSortSlice1k(t *testing.T) {
 	copy(sorted, data)
 	sort.Strings(sorted)
 
-	Sort(data)
+	SortSlice(data, func(i int) string { return data[i] })
 	if !reflect.DeepEqual(data, sorted) {
 		t.Errorf(" got %v", data)
 		t.Errorf("want %v", sorted)
@@ -125,7 +124,7 @@ func TestSortBible(t *testing.T) {
 	}
 }
 
-func BenchmarkSortMsdBible(b *testing.B) {
+func BenchmarkRadixSortBible(b *testing.B) {
 	b.StopTimer()
 	var data []string
 	f, err := os.Open("res/bible.txt")
@@ -148,7 +147,7 @@ func BenchmarkSortMsdBible(b *testing.B) {
 	}
 }
 
-func BenchmarkSortSliceMsdBible(b *testing.B) {
+func BenchmarkRadixSortSliceBible(b *testing.B) {
 	b.StopTimer()
 	var data []string
 	f, err := os.Open("res/bible.txt")
@@ -217,7 +216,7 @@ func BenchmarkSortSliceBible(b *testing.B) {
 	}
 }
 
-func BenchmarkSortMsd1K(b *testing.B) {
+func BenchmarkRadixSort1k(b *testing.B) {
 	b.StopTimer()
 	data := make([]string, 1<<10)
 	for i := range data {
@@ -233,7 +232,7 @@ func BenchmarkSortMsd1K(b *testing.B) {
 	}
 }
 
-func BenchmarkSortSliceMsd1K(b *testing.B) {
+func BenchmarkRadixSortSlice1k(b *testing.B) {
 	b.StopTimer()
 	data := make([]string, 1<<10)
 	for i := range data {
@@ -249,7 +248,7 @@ func BenchmarkSortSliceMsd1K(b *testing.B) {
 	}
 }
 
-func BenchmarkSortStrings1K(b *testing.B) {
+func BenchmarkSortStrings1k(b *testing.B) {
 	b.StopTimer()
 	data := make([]string, 1<<10)
 	for i := range data {
@@ -265,7 +264,7 @@ func BenchmarkSortStrings1K(b *testing.B) {
 	}
 }
 
-func BenchmarkSortSlice1K(b *testing.B) {
+func BenchmarkSortSlice1k(b *testing.B) {
 	b.StopTimer()
 	data := make([]string, 1<<10)
 	for i := range data {
