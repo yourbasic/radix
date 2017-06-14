@@ -35,7 +35,6 @@ func SortSlice(slice interface{}, str func(i int) string) {
 		perm[res.index] = i
 		res = res.next
 	}
-	//perm := []int{2, 0, 3, 1}
 	for i := 0; i < len(perm); i++ {
 		j := perm[i]
 		for j != i {
