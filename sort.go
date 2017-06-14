@@ -5,7 +5,10 @@
 // faster than Quicksort, sometimes more than twice as fast.
 package radix
 
-import "reflect"
+import (
+	"reflect"
+	"unsafe"
+)
 
 // Sort sorts a slice of strings in increasing byte-wise lexicographic order.
 //
@@ -15,7 +18,8 @@ func Sort(a []string) {
 	if n < 2 {
 		return
 	}
-	mem := make([]list, n) // Put elements into a linked list.
+	// Put elements into a linked list.
+	mem := make([]list, n)
 	for i, s := range a {
 		mem[i].str = s
 		if i < n-1 {
@@ -36,31 +40,32 @@ func SortSlice(slice interface{}, str func(i int) string) {
 	if slice == nil {
 		return
 	}
-	rv := reflect.ValueOf(slice)
-	swap := reflect.Swapper(slice)
-	n := rv.Len()
+	n := reflect.ValueOf(slice).Len()
 	if n < 2 {
 		return
 	}
-	mem := make([]list, n) // Put elements into a linked list.
+	// Put elements into a linked list.
+	mem := make([]list, n)
 	for i := 0; i < n; i++ {
 		mem[i].str = str(i)
-		mem[i].index = i
 		if i < n-1 {
 			mem[i].next = &mem[i+1]
 		}
 	}
 	res := msdRadixSort(&mem[0], n)
+	// Create a permutation that will sort the slice.
 	perm := make([]int, n)
+	const size = unsafe.Sizeof(list{})
+	base := uintptr(unsafe.Pointer(&mem[0]))
 	for i := 0; i < n; i++ {
-		perm[res.index] = i
+		perm[(uintptr(unsafe.Pointer(res))-base)/size] = i
 		res = res.next
 	}
-	for i := 0; i < len(perm); i++ {
-		j := perm[i]
-		for j != i {
+	// Apply permutation by swapping.
+	swap := reflect.Swapper(slice)
+	for i := 0; i < n; i++ {
+		for j := perm[i]; j != i; perm[j], j = j, perm[j] {
 			swap(i, j)
-			perm[j], j = j, perm[j]
 		}
 	}
 }
@@ -68,9 +73,8 @@ func SortSlice(slice interface{}, str func(i int) string) {
 const insertBreak = 16
 
 type list struct {
-	index int
-	str   string
-	next  *list
+	str  string
+	next *list
 }
 
 type bucket struct {
