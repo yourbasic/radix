@@ -3,17 +3,23 @@
 // This is an optimized sorting algorithm equivalent to sort.Strings.
 // For string sorting, a carefully implemented radix sort can be considerably
 // faster than Quicksort, sometimes more than twice as fast.
-//
 package radix
 
+import (
+	"reflect"
+	"unsafe"
+)
+
 // Sort sorts a slice of strings in increasing byte-wise lexicographic order.
+//
 // The function is equivalent to sort.Strings in the standard library.
 func Sort(a []string) {
 	n := len(a)
 	if n < 2 {
 		return
 	}
-	mem := make([]list, n) // Put elements into a linked list.
+	// Put elements into a linked list.
+	mem := make([]list, n)
 	for i, s := range a {
 		mem[i].str = s
 		if i < n-1 {
@@ -24,6 +30,43 @@ func Sort(a []string) {
 	for i := range a {
 		a[i] = res.str
 		res = res.next
+	}
+}
+
+// SortSlice sorts a slice according to the strings returned by str.
+//
+// The function panics if the provided interface is not a slice.
+func SortSlice(slice interface{}, str func(i int) string) {
+	if slice == nil {
+		return
+	}
+	n := reflect.ValueOf(slice).Len()
+	if n < 2 {
+		return
+	}
+	// Put elements into a linked list.
+	mem := make([]list, n)
+	for i := 0; i < n; i++ {
+		mem[i].str = str(i)
+		if i < n-1 {
+			mem[i].next = &mem[i+1]
+		}
+	}
+	res := msdRadixSort(&mem[0], n)
+	// Create a permutation that will sort the slice.
+	perm := make([]int, n)
+	const size = unsafe.Sizeof(list{})
+	base := uintptr(unsafe.Pointer(&mem[0]))
+	for i := 0; i < n; i++ {
+		perm[(uintptr(unsafe.Pointer(res))-base)/size] = i
+		res = res.next
+	}
+	// Apply permutation by swapping.
+	swap := reflect.Swapper(slice)
+	for i := 0; i < n; i++ {
+		for j := perm[i]; j != i; perm[j], j = j, perm[j] {
+			swap(i, j)
+		}
 	}
 }
 
