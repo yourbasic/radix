@@ -73,7 +73,7 @@ func TestSortSliceBible(t *testing.T) {
 		for i, s := range data {
 			if s != sorted[i] {
 				t.Errorf("%v  got: %v", i, s)
-				t.Errorf("%v want: %v\n\n", i, sorted[i])
+				t.Errorf("%v want: %v", i, sorted[i])
 			}
 		}
 	}
