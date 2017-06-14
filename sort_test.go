@@ -125,6 +125,29 @@ func BenchmarkSortStringsBible(b *testing.B) {
 	}
 }
 
+func BenchmarkSortSliceBible(b *testing.B) {
+	b.StopTimer()
+	var data []string
+	f, err := os.Open("res/bible.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for sc := bufio.NewScanner(f); sc.Scan(); {
+		data = append(data, sc.Text())
+	}
+
+	a := make([]string, len(data))
+	for i := 0; i < b.N; i++ {
+		copy(a, data)
+		b.StartTimer()
+		sort.Slice(a, func(i, j int) bool { return a[i] < a[j] })
+		b.StopTimer()
+	}
+	if err := f.Close(); err != nil {
+		log.Fatal(err)
+	}
+}
+
 func BenchmarkSortMsd1K(b *testing.B) {
 	b.StopTimer()
 	data := make([]string, 1<<10)
@@ -153,6 +176,22 @@ func BenchmarkSortStrings1K(b *testing.B) {
 		copy(a, data)
 		b.StartTimer()
 		sort.Strings(a)
+		b.StopTimer()
+	}
+}
+
+func BenchmarkSortSlice1K(b *testing.B) {
+	b.StopTimer()
+	data := make([]string, 1<<10)
+	for i := range data {
+		data[i] = strconv.Itoa(i ^ 0x2cc)
+	}
+
+	a := make([]string, len(data))
+	for i := 0; i < b.N; i++ {
+		copy(a, data)
+		b.StartTimer()
+		sort.Slice(a, func(i, j int) bool { return a[i] < a[j] })
 		b.StopTimer()
 	}
 }
