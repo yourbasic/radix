@@ -26,9 +26,14 @@ func SortSlice(slice interface{}, str func(i int) string) {
 		}
 	}
 	_ = msdRadixSort(&mem[0], n)
-	swap(0, 1)
-	swap(2, 3)
-	swap(1, 2)
+	perm := []int{2, 0, 3, 1}
+	for i := 0; i < len(perm); i++ {
+		j := perm[i]
+		for j != i {
+			swap(i, j)
+			perm[j], j = j, perm[j]
+		}
+	}
 }
 
 // Sort sorts a slice of strings in increasing byte-wise lexicographic order.
