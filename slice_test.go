@@ -16,6 +16,7 @@ func TestSortSlice(t *testing.T) {
 	sort.Strings(sorted)
 
 	a := data[0:]
+	SortSlice(a, func(i int) string { return a[i] })
 	if !reflect.DeepEqual(a, sorted) {
 		t.Errorf(" got %v", a)
 		t.Errorf("want %v", sorted)
@@ -50,6 +51,31 @@ func TestSortSlice1k(t *testing.T) {
 	if !reflect.DeepEqual(data, sorted) {
 		t.Errorf(" got %v", data)
 		t.Errorf("want %v", sorted)
+	}
+}
+
+func TestSortSliceBible(t *testing.T) {
+	var data []string
+	f, err := os.Open("res/bible.txt")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for sc := bufio.NewScanner(f); sc.Scan(); {
+		data = append(data, sc.Text())
+	}
+
+	sorted := make([]string, len(data))
+	copy(sorted, data)
+	sort.Strings(sorted)
+
+	SortSlice(data, func(i int) string { return data[i] })
+	if !reflect.DeepEqual(data, sorted) {
+		for i, s := range data {
+			if s != sorted[i] {
+				t.Errorf("%v  got: %v", i, s)
+				t.Errorf("%v want: %v\n\n", i, sorted[i])
+			}
+		}
 	}
 }
 
