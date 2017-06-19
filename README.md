@@ -2,6 +2,8 @@
 
 ### A fast string sorting algorithm
 
+[![GoDoc](https://godoc.org/github.com/yourbasic/radix?status.svg)][godoc-radix]
+
 This is an optimized sorting algorithm equivalent to `sort.Strings`
 in the Go standard library. For string sorting, a carefully implemented
 radix sort can be considerably faster than Quicksort, sometimes
