@@ -13,8 +13,10 @@ radix sort can be considerably faster than Quicksort, sometimes
 
 A discussion of **MSD radix sort**, its implementation and a comparison
 with other well-known sorting algorithms can be found in
-[Implementing radixsort][implradix].
-
+[Implementing radixsort][implradix]. In summary, MSD radix sort
+uses O(n) extra space and runs in O(n+B) worst-case time,
+where n is the number of strings to be sorted and B
+is the number of bytes that must be inspected to sort the strings.
 
 ### Installation
 
