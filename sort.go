@@ -3,6 +3,10 @@
 // This is an optimized sorting algorithm equivalent to sort.Strings.
 // For string sorting, a carefully implemented radix sort can be considerably
 // faster than Quicksort, sometimes more than twice as fast.
+//
+// The algorithm uses O(n) extra space and runs in O(n+B) worst-case time,
+// where n is the number of strings to be sorted and B is the number of bytes
+// that must be inspected to sort the strings.
 package radix
 
 import (
